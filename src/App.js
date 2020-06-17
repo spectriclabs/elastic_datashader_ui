@@ -337,7 +337,10 @@ class App extends React.Component {
 
     const numericFields = selectedIndexFields
       .filter(isNumeric)
-      .map((field) => field.name);
+      .map((field) => ({
+        value: field.name,
+        inputDisplay: field.name,
+      }));
 
     const styleProperties = {
       mode,
