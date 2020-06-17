@@ -165,12 +165,10 @@ const renderCategoricalColorStyleConfiguration = (
   selectedIndexFields,
   selectedIndexField
 ) => {
-  const displayableIndexFields = selectedIndexFields.map((field) => {
-    return {
-      value: field.name,
-      inputDisplay: field.name,
-    };
-  });
+  const displayableIndexFields = selectedIndexFields.map((field) => ({
+    value: field.name,
+    inputDisplay: field.name,
+  }));
   return (
     <Fragment>
       <EuiFormRow label="Value" display="rowCompressed">
@@ -201,6 +199,7 @@ const renderColorStyleConfiguration = (properties, handlePropertyChange) => {
     mode,
     colorKeyName,
     selectedIndexFields,
+    selectedIndexField,
   } = properties;
   const styleConfig =
     mode === 'heat'
@@ -208,7 +207,8 @@ const renderColorStyleConfiguration = (properties, handlePropertyChange) => {
       : renderCategoricalColorStyleConfiguration(
           colorKeyName,
           handlePropertyChange,
-          selectedIndexFields
+          selectedIndexFields,
+          selectedIndexField
         );
   return (
     <Fragment>
