@@ -252,7 +252,7 @@ class App extends React.Component {
 
   populateIndices() {
     axios
-      .get('${BASE_URL}/indices')
+      .get(`${BASE_URL}/indices`)
       .then((result) => {
         const indices = result.data.indices.map((idx) => ({
           value: idx,
