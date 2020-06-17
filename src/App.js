@@ -193,7 +193,7 @@ class App extends React.Component {
         `ellipse_major=${ellipseMajor}`,
         `ellipse_minor=${ellipseMinor}`,
         `ellipse_tilt=${ellipseTilt}`,
-        'ellipse=true'
+        'ellipses=true'
       );
     }
     const url = tmsBase.concat(queryParams.join('&'));
