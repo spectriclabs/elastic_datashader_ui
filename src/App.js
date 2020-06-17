@@ -174,9 +174,13 @@ class App extends React.Component {
         console.error(`No object found for ${selectedIndexField}`);
         return;
       }
+      let type = selectedFieldObj[0].type;
+      if (type === 'keyword') {
+        type = 'string';
+      }
       queryParams.push(
         `category_field=${selectedIndexField}`,
-        `category_type=${selectedFieldObj[0].type}`
+        `category_type=${type}`
       );
     } else if (mode === 'category' && selectedIndexField === '') {
       return;
