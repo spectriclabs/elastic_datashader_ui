@@ -192,7 +192,8 @@ class App extends React.Component {
         `ellipse_search_distance=${ellipseSearchDistance}`,
         `ellipse_major=${ellipseMajor}`,
         `ellipse_minor=${ellipseMinor}`,
-        `ellipse_tilt=${ellipseTilt}`
+        `ellipse_tilt=${ellipseTilt}`,
+        'ellipse=true'
       );
     }
     const url = tmsBase.concat(queryParams.join('&'));
