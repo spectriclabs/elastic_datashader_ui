@@ -44,9 +44,9 @@ class App extends React.Component {
       selectedIndexField: '',
       query: '',
       filters: [],
-      ellipseMajorField: '',
-      ellipseMinorField: '',
-      ellipseTiltField: '',
+      ellipseMajor: '',
+      ellipseMinor: '',
+      ellipseTilt: '',
     };
     this.mbMap = null;
     this.handlePropertyChange = this.handlePropertyChange.bind(this);
@@ -120,9 +120,9 @@ class App extends React.Component {
       selectedIndexField,
       query,
       filters,
-      ellipseMajorField,
-      ellipseMinorField,
-      ellipseTiltField,
+      ellipseMajor,
+      ellipseMinor,
+      ellipseTilt,
     } = this.state;
 
     // Can't move forward without an index
@@ -184,9 +184,9 @@ class App extends React.Component {
       queryParams.push(
         `ellipse_units=${ellipseUnits}`,
         `ellipse_search_distance=${ellipseSearchDistance}`,
-        `ellipse_major=${ellipseMajorField}`,
-        `ellipse_minor=${ellipseMinorField}`,
-        `ellipse_tilt=${ellipseTiltField}`
+        `ellipse_major=${ellipseMajor}`,
+        `ellipse_minor=${ellipseMinor}`,
+        `ellipse_tilt=${ellipseTilt}`
       );
     }
     const url = tmsBase.concat(queryParams.join('&'));
@@ -287,6 +287,9 @@ class App extends React.Component {
       selectedIndexFields,
       selectedIndexField,
       filters,
+      ellipseMajor,
+      ellipseMinor,
+      ellipseTilt
     } = this.state;
 
     const datePicker = (
@@ -344,6 +347,9 @@ class App extends React.Component {
       selectedIndexFields,
       selectedIndexField,
       numericFields,
+      ellipseMajor,
+      ellipseMinor,
+      ellipseTilt
     };
 
     return (
