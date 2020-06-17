@@ -21,6 +21,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
 import { isNumeric } from './util';
 
+const BASE_URL = "http://localhost:5000";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -75,7 +77,7 @@ class App extends React.Component {
    */
   handleIndexChange(selectedIndex) {
     axios
-      .get(`http://localhost:5000/indices/${selectedIndex}/mapping`)
+      .get(`${BASE_URL}/indices/${selectedIndex}/mapping`)
       .then((result) => {
         this.setState(
           {
@@ -152,7 +154,7 @@ class App extends React.Component {
     }
 
     const cmap = mode === 'heat' ? colorRampName : colorKeyName;
-    const tmsBase = `http://localhost:5000/tms/${selectedIndex}/{z}/{x}/{y}.png?`;
+    const tmsBase = `${BASE_URL}/tms/${selectedIndex}/{z}/{x}/{y}.png?`;
 
     // TODO: Maybe use `new URLSearchParams(object).toString()` instead
     const queryParams = [
@@ -250,7 +252,7 @@ class App extends React.Component {
 
   populateIndices() {
     axios
-      .get('http://localhost:5000/indices')
+      .get('${BASE_URL}/indices')
       .then((result) => {
         const indices = result.data.indices.map((idx) => ({
           value: idx,
