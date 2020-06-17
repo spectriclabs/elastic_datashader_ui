@@ -40,6 +40,9 @@ const renderStyleConfiguration = (properties, handlePropertyChange) => {
     ellipseUnits,
     ellipseSearchDistance,
     numericFields,
+    ellipseMajor,
+    ellipseMinor,
+    ellipseTilt
   } = properties;
   const ellipsesSwitch = (
     <EuiFormRow label="Render Mode" display="columnCompressed">
@@ -52,95 +55,82 @@ const renderStyleConfiguration = (properties, handlePropertyChange) => {
     </EuiFormRow>
   );
 
-  const pointStyleConfiguration = (
-    <Fragment>
-      <EuiFormRow label="Dynamic Range" display="rowCompressed">
-        <EuiSuperSelect
-          label="Span Range"
-          options={spanRangeOptions}
-          valueOfSelected={spanRange}
-          onChange={onSelectChange(handlePropertyChange, 'spanRange')}
-        />
-      </EuiFormRow>
-      <EuiFormRow label="Point Size" display="rowCompressed">
-        <EuiSuperSelect
-          label="Point Size"
-          options={spreadRangeOptions}
-          valueOfSelected={spread}
-          onChange={onSelectChange(handlePropertyChange, 'spread')}
-        />
-      </EuiFormRow>
-      <EuiFormRow label="Grid resolution" display="rowCompressed">
-        <EuiSuperSelect
-          label="Grid resolution"
-          options={gridResolutionOptions}
-          valueOfSelected={gridResolution}
-          onChange={onSelectChange(handlePropertyChange, 'gridResolution')}
-        />
-      </EuiFormRow>
-    </Fragment>
-  );
+  // Common styling options for both points as well as ellipses
+  const baseConfigs = [
+    {
+      label: 'Dynamic Range',
+      options: spanRangeOptions,
+      valueOfSelected: spanRange,
+      propName: 'spanRange',
+    },
+  ];
 
-  const ellipseStyleConfiguration = (
-    <Fragment>
-      <EuiFormRow label="Dynamic Range" display="rowCompressed">
-        <EuiSuperSelect
-          label="Span Range"
-          options={spanRangeOptions}
-          valueOfSelected={spanRange}
-          onChange={onSelectChange(handlePropertyChange, 'spanRange')}
-        />
-      </EuiFormRow>
-      <EuiFormRow label="Ellipse Major" display="rowCompressed">
-        <EuiSuperSelect
-          label="Ellipse Major"
-          options={numericFields}
-          valueOfSelected={''}
-          onChange={onSelectChange(handlePropertyChange, 'spanRange')}
-        />
-      </EuiFormRow>
-      <EuiFormRow label="Ellipse Minor" display="rowCompressed">
-        <EuiSuperSelect
-          label="Ellipse Minor"
-          options={numericFields}
-          valueOfSelected={''}
-          onChange={onSelectChange(handlePropertyChange, 'spanRange')}
-        />
-      </EuiFormRow>
-      <EuiFormRow label="Ellipse Tilt" display="rowCompressed">
-        <EuiSuperSelect
-          label="Ellipse Tilt"
-          options={numericFields}
-          valueOfSelected={''}
-          onChange={onSelectChange(handlePropertyChange, 'spanRange')}
-        />
-      </EuiFormRow>
-      <EuiFormRow label="Ellipse Units" display="rowCompressed">
-        <EuiSuperSelect
-          label="Ellipse Units"
-          options={ellipseUnitsOptions}
-          valueOfSelected={ellipseUnits}
-          onChange={onSelectChange(handlePropertyChange, 'ellipseUnits')}
-        />
-      </EuiFormRow>
-      <EuiFormRow label="Ellipse Search Distance" display="rowCompressed">
-        <EuiSuperSelect
-          label="Ellipse Search Distance"
-          options={ellipseSearchDistances}
-          valueOfSelected={ellipseSearchDistance}
-          onChange={onSelectChange(
-            handlePropertyChange,
-            'ellipseSearchDistance'
-          )}
-        />
-      </EuiFormRow>
-    </Fragment>
-  );
+  // Common styling options for just points
+  const pointStyleConfigs = baseConfigs.concat([
+    {
+      label: 'Point Size',
+      options: spreadRangeOptions,
+      valueOfSelected: spread,
+      propName: 'spread',
+    },
+    {
+      label: 'Grid Resolution',
+      options: gridResolutionOptions,
+      valueOfSelected: gridResolution,
+      propName: 'gridResolution',
+    },
+  ]);
 
+  // Common styling options for just ellipses
+  const ellipseStyleConfigs = baseConfigs.concat([
+    {
+      label: 'Ellipse Major',
+      options: numericFields,
+      valueOfSelected: ellipseMajor,
+      propName: 'ellipseMajor',
+    },
+    {
+      label: 'Ellipse Minor',
+      options: numericFields,
+      valueOfSelected: ellipseMinor,
+      propName: 'ellipseMinor',
+    },
+    {
+      label: 'Ellipse Tilt',
+      options: numericFields,
+      valueOfSelected: ellipseTilt,
+      propName: 'ellipseTilt',
+    },
+    {
+      label: 'Ellipse Units',
+      options: ellipseUnitsOptions,
+      valueOfSelected: ellipseUnits,
+      propName: 'ellipseUnits',
+    },
+    {
+      label: 'Ellipse Search Distance',
+      options: ellipseSearchDistances,
+      valueOfSelected: ellipseSearchDistance,
+      propName: 'ellipseSearchDistance',
+    },
+  ]);
+
+  const configToShow = !showEllipses ? pointStyleConfigs : ellipseStyleConfigs;
   return (
     <Fragment>
       {ellipsesSwitch}
-      {!showEllipses ? pointStyleConfiguration : ellipseStyleConfiguration}
+      <Fragment>
+        {configToShow.map((cfg) => (
+          <EuiFormRow label={cfg.label} display="rowCompressed">
+            <EuiSuperSelect
+              label={cfg.label}
+              options={cfg.options}
+              valueOfSelected={cfg.valueOfSelected}
+              onChange={onSelectChange(handlePropertyChange, cfg.propName)}
+            />
+          </EuiFormRow>
+        ))}
+      </Fragment>
     </Fragment>
   );
 };
