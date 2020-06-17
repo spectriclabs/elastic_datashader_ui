@@ -121,7 +121,7 @@ const renderStyleConfiguration = (properties, handlePropertyChange) => {
       {ellipsesSwitch}
       <Fragment>
         {configToShow.map((cfg) => (
-          <EuiFormRow label={cfg.label} display="rowCompressed">
+          <EuiFormRow key={cfg.label} label={cfg.label} display="rowCompressed">
             <EuiSuperSelect
               label={cfg.label}
               options={cfg.options}
