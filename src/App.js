@@ -21,7 +21,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
 import { isNumeric } from './util';
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = 'http://localhost:5000';
 
 class App extends React.Component {
   constructor(props) {
@@ -291,7 +291,7 @@ class App extends React.Component {
       filters,
       ellipseMajor,
       ellipseMinor,
-      ellipseTilt
+      ellipseTilt,
     } = this.state;
 
     const datePicker = (
@@ -351,7 +351,7 @@ class App extends React.Component {
       numericFields,
       ellipseMajor,
       ellipseMinor,
-      ellipseTilt
+      ellipseTilt,
     };
 
     return (

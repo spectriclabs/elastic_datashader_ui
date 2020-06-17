@@ -42,7 +42,7 @@ const renderStyleConfiguration = (properties, handlePropertyChange) => {
     numericFields,
     ellipseMajor,
     ellipseMinor,
-    ellipseTilt
+    ellipseTilt,
   } = properties;
   const ellipsesSwitch = (
     <EuiFormRow label="Render Mode" display="columnCompressed">
