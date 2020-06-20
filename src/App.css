@@ -78,3 +78,7 @@ body > #root > div {
     transform: rotate(360deg);
   }
 }
+
+.mapboxgl-map canvas {
+  cursor: crosshair;
+}

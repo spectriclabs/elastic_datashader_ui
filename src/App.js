@@ -253,6 +253,17 @@ class App extends React.Component {
     this.mbMap.on('load', () => {
       this.updateUrl();
     });
+
+    this.mbMap.on('click', (e) => {
+      // TODO call elastic datashader to get the info
+
+      var popup = new mapboxgl.Popup({ closeOnClick: false })
+        .setLngLat([e.lngLat.lng, e.lngLat.lat])
+        .setHTML(
+          `<h1 style="color: black">Lat: ${e.lngLat.lat} <br/> Lon: ${e.lngLat.lng}</h1>`
+        )
+        .addTo(this.mbMap);
+    });
   }
 
   populateIndices() {
