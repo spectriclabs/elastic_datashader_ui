@@ -5,6 +5,7 @@ import {
   EuiHorizontalRule,
   EuiSuperSelect,
   EuiSwitch,
+  EuiFieldText,
 } from '@elastic/eui';
 import '@elastic/eui/dist/eui_theme_dark.css';
 import './App.css';
@@ -163,7 +164,8 @@ const renderCategoricalColorStyleConfiguration = (
   colorKeyName,
   handlePropertyChange,
   selectedIndexFields,
-  selectedIndexField
+  selectedIndexField,
+  highlightedValue
 ) => {
   const displayableIndexFields = selectedIndexFields.map((field) => ({
     value: field.name,
@@ -176,6 +178,16 @@ const renderCategoricalColorStyleConfiguration = (
           options={displayableIndexFields}
           onChange={onSelectChange(handlePropertyChange, 'selectedIndexField')}
           valueOfSelected={selectedIndexField}
+          compressed
+        />
+      </EuiFormRow>
+      <EuiFormRow label="Highlight (Optional)" display="rowCompressed">
+        <EuiFieldText
+          name="first"
+          onChange={(e) =>
+            handlePropertyChange('highlightedValue', e.target.value)
+          }
+          value={highlightedValue}
           compressed
         />
       </EuiFormRow>
@@ -200,6 +212,7 @@ const renderColorStyleConfiguration = (properties, handlePropertyChange) => {
     colorKeyName,
     selectedIndexFields,
     selectedIndexField,
+    highlightedValue,
   } = properties;
   const styleConfig =
     mode === 'heat'
@@ -208,7 +221,8 @@ const renderColorStyleConfiguration = (properties, handlePropertyChange) => {
           colorKeyName,
           handlePropertyChange,
           selectedIndexFields,
-          selectedIndexField
+          selectedIndexField,
+          highlightedValue
         );
   return (
     <Fragment>

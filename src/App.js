@@ -52,6 +52,7 @@ class App extends React.Component {
       radius: 20,
       fromPage: 0,
       pageSize: 100,
+      highlightedValue: '',
     };
     this.mbMap = null;
     this.handlePropertyChange = this.handlePropertyChange.bind(this);
@@ -128,6 +129,7 @@ class App extends React.Component {
       ellipseMajor,
       ellipseMinor,
       ellipseTilt,
+      highlightedValue,
     } = this.state;
 
     // Can't move forward without an index
@@ -185,6 +187,9 @@ class App extends React.Component {
         `category_field=${selectedIndexField}`,
         `category_type=${type}`
       );
+      if (highlightedValue !== '') {
+        queryParams.push(`highlight=${highlightedValue}`);
+      }
     } else if (mode === 'category' && selectedIndexField === '') {
       return;
     }
@@ -199,6 +204,7 @@ class App extends React.Component {
         'ellipses=true'
       );
     }
+
     const url = tmsBase.concat(queryParams.join('&'));
 
     console.log('UPDATE URL', url);
@@ -350,6 +356,7 @@ class App extends React.Component {
       ellipseMajor,
       ellipseMinor,
       ellipseTilt,
+      highlightedValue,
     } = this.state;
 
     const datePicker = (
@@ -413,6 +420,7 @@ class App extends React.Component {
       ellipseMajor,
       ellipseMinor,
       ellipseTilt,
+      highlightedValue,
     };
 
     return (
