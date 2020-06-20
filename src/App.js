@@ -49,6 +49,9 @@ class App extends React.Component {
       ellipseMajor: '',
       ellipseMinor: '',
       ellipseTilt: '',
+      radius: 20,
+      fromPage: 0,
+      pageSize: 100,
     };
     this.mbMap = null;
     this.handlePropertyChange = this.handlePropertyChange.bind(this);
@@ -251,7 +254,46 @@ class App extends React.Component {
     });
 
     this.mbMap.on('load', () => {
+      console.log('UPDATING MAP');
       this.updateUrl();
+
+      this.mbMap.on('click', (e) => {
+        const {
+          startDate,
+          endDate,
+          filters,
+          selectedIndex,
+          radius,
+          fromPage,
+          pageSize,
+        } = this.state;
+        if (selectedIndex === '') {
+          return;
+        }
+        const { lng, lat } = e.lngLat;
+        const url = `${BASE_URL}/data/${selectedIndex}/${lat}/${lng}/${radius}`;
+        const paramsDict = {
+          timeFilters: {
+            from: startDate,
+            to: endDate,
+          },
+          filters,
+        };
+        const params = new URLSearchParams({
+          params: JSON.stringify(paramsDict),
+          from: fromPage,
+          size: pageSize,
+        });
+        console.log(params.toString());
+        const urlWithParams = `${url}?from=${fromPage}&size=${pageSize}`;
+        console.log(urlWithParams);
+        axios
+          .get(urlWithParams)
+          .then((result) => {
+            console.log(result);
+          })
+          .catch((err) => console.error(err));
+      });
     });
 
     this.mbMap.on('click', (e) => {
