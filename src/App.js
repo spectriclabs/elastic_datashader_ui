@@ -21,7 +21,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
 import { isNumeric } from './util';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL =
+  process.env.REACT_APP_DATASHADER_URL || 'http://localhost:5000';
 
 class App extends React.Component {
   constructor(props) {
