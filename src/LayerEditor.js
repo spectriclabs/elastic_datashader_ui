@@ -163,19 +163,15 @@ const renderHeatColorStyleConfiguration = (
 const renderCategoricalColorStyleConfiguration = (
   colorKeyName,
   handlePropertyChange,
-  selectedIndexFields,
+  aggregatableFields,
   selectedIndexField,
   highlightedValue
 ) => {
-  const displayableIndexFields = selectedIndexFields.map((field) => ({
-    value: field.name,
-    inputDisplay: field.name,
-  }));
   return (
     <Fragment>
       <EuiFormRow label="Value" display="rowCompressed">
         <EuiSuperSelect
-          options={displayableIndexFields}
+          options={aggregatableFields}
           onChange={onSelectChange(handlePropertyChange, 'selectedIndexField')}
           valueOfSelected={selectedIndexField}
           compressed
@@ -210,7 +206,7 @@ const renderColorStyleConfiguration = (properties, handlePropertyChange) => {
     showEllipses,
     mode,
     colorKeyName,
-    selectedIndexFields,
+    aggregatableFields,
     selectedIndexField,
     highlightedValue,
   } = properties;
@@ -220,7 +216,7 @@ const renderColorStyleConfiguration = (properties, handlePropertyChange) => {
       : renderCategoricalColorStyleConfiguration(
           colorKeyName,
           handlePropertyChange,
-          selectedIndexFields,
+          aggregatableFields,
           selectedIndexField,
           highlightedValue
         );

@@ -19,7 +19,8 @@ import LayerEditor from './LayerEditor.js';
 import '@elastic/eui/dist/eui_theme_dark.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
-import { isNumeric } from './util';
+import { isNumeric, isAggregatable } from './util';
+var _ = require('lodash');
 
 const BASE_URL =
   process.env.REACT_APP_DATASHADER_URL || 'http://localhost:5000';
@@ -43,7 +44,7 @@ class App extends React.Component {
       colorKeyName: 'glasbey_light',
       indices: [],
       selectedIndex: '',
-      selectedIndexFields: [],
+      selectedIndexFields: {},
       selectedIndexField: '',
       query: '',
       filters: [],
@@ -82,12 +83,12 @@ class App extends React.Component {
    */
   handleIndexChange(selectedIndex) {
     axios
-      .get(`${BASE_URL}/indices/${selectedIndex}/mapping`)
+      .get(`${BASE_URL}/indices/${selectedIndex}/field_caps`)
       .then((result) => {
         this.setState(
           {
             selectedIndex,
-            selectedIndexFields: result.data.mapping,
+            selectedIndexFields: result.data.fields,
           },
           this.updateUrl
         );
@@ -173,21 +174,21 @@ class App extends React.Component {
       `cmap=${cmap}`,
     ];
     if (mode === 'category' && selectedIndexField !== '') {
-      const selectedFieldObj = selectedIndexFields.filter(
-        (field) => field.name === selectedIndexField
-      );
-      if (selectedFieldObj.length === 0) {
+      const selectedFieldDef = selectedIndexFields[selectedIndexField];
+      if (selectedFieldDef) {
+        let type = _.keys(selectedFieldDef)[0]; // pick the first type if there are conflicts
+        if (type === 'keyword') {
+          type = 'string';
+        }
+        queryParams.push(
+          `category_field=${selectedIndexField}`,
+          `category_type=${type}`
+        );
+      } else {
         console.error(`No object found for ${selectedIndexField}`);
         return;
       }
-      let type = selectedFieldObj[0].type;
-      if (type === 'keyword') {
-        type = 'string';
-      }
-      queryParams.push(
-        `category_field=${selectedIndexField}`,
-        `category_type=${type}`
-      );
+
       if (highlightedValue !== '') {
         queryParams.push(`highlight=${highlightedValue}`);
       }
@@ -391,18 +392,28 @@ class App extends React.Component {
       strict: true,
       fields: {},
     };
-    selectedIndexFields.forEach((field) => {
-      schema.fields[field.name] = {
-        type: field.type,
-      };
+
+    _.forOwn(selectedIndexFields, (value, key) => {
+      schema.fields[key] = _.keys(value)[0];
     });
 
-    const numericFields = selectedIndexFields
-      .filter(isNumeric)
+    const aggregatableFields = _.chain(selectedIndexFields)
+      .pickBy((value, key) => isAggregatable(value))
+      .keys()
       .map((field) => ({
-        value: field.name,
-        inputDisplay: field.name,
-      }));
+        value: field,
+        inputDisplay: field,
+      }))
+      .value();
+
+    const numericFields = _.chain(selectedIndexFields)
+      .pickBy((value, key) => isNumeric(value))
+      .keys()
+      .map((field) => ({
+        value: field,
+        inputDisplay: field,
+      }))
+      .value();
 
     const styleProperties = {
       mode,
@@ -418,6 +429,7 @@ class App extends React.Component {
       selectedIndexFields,
       selectedIndexField,
       numericFields,
+      aggregatableFields,
       ellipseMajor,
       ellipseMinor,
       ellipseTilt,
