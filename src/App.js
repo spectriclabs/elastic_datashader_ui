@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { chain, keys, forOwn } from 'lodash';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 import moment from 'moment';
 import {
@@ -20,7 +21,6 @@ import '@elastic/eui/dist/eui_theme_dark.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
 import { isNumeric, isAggregatable } from './util';
-var _ = require('lodash');
 
 const BASE_URL =
   process.env.REACT_APP_DATASHADER_URL || 'http://localhost:5000';
@@ -176,7 +176,7 @@ class App extends React.Component {
     if (mode === 'category' && selectedIndexField !== '') {
       const selectedFieldDef = selectedIndexFields[selectedIndexField];
       if (selectedFieldDef) {
-        let type = _.keys(selectedFieldDef)[0]; // pick the first type if there are conflicts
+        let type = keys(selectedFieldDef)[0]; // pick the first type if there are conflicts
         if (type === 'keyword') {
           type = 'string';
         }
@@ -307,7 +307,7 @@ class App extends React.Component {
     this.mbMap.on('click', (e) => {
       // TODO call elastic datashader to get the info
 
-      var popup = new mapboxgl.Popup({ closeOnClick: false })
+      const popup = new mapboxgl.Popup({ closeOnClick: false })
         .setLngLat([e.lngLat.lng, e.lngLat.lat])
         .setHTML(
           `<h1 style="color: black">Lat: ${e.lngLat.lat} <br/> Lon: ${e.lngLat.lng}</h1>`
@@ -393,11 +393,11 @@ class App extends React.Component {
       fields: {},
     };
 
-    _.forOwn(selectedIndexFields, (value, key) => {
-      schema.fields[key] = _.keys(value)[0];
+    forOwn(selectedIndexFields, (value, key) => {
+      schema.fields[key] = keys(value)[0];
     });
 
-    const aggregatableFields = _.chain(selectedIndexFields)
+    const aggregatableFields = chain(selectedIndexFields)
       .pickBy((value, key) => isAggregatable(value))
       .keys()
       .map((field) => ({
@@ -406,7 +406,7 @@ class App extends React.Component {
       }))
       .value();
 
-    const numericFields = _.chain(selectedIndexFields)
+    const numericFields = chain(selectedIndexFields)
       .pickBy((value, key) => isNumeric(value))
       .keys()
       .map((field) => ({
