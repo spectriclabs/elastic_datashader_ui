@@ -1,4 +1,4 @@
-var _ = require('lodash');
+import { forOwn } from 'lodash';
 
 const numericFieldTypes = [
   'long',
@@ -16,7 +16,7 @@ export const isNumeric = (field) => {
   // one of them is numeric we return true
   let result = false;
 
-  _.forOwn(field, (value, key) => {
+  forOwn(field, (value, key) => {
     if (numericFieldTypes.includes(value.type) === true) {
       result = true;
       return false; // break out of loop
@@ -31,7 +31,7 @@ export const isAggregatable = (field) => {
   // one of them is aggregatable we return true
   let result = false;
 
-  _.forOwn(field, (value, key) => {
+  forOwn(field, (value, key) => {
     if (value.aggregatable === true) {
       result = true;
       return false; // break out of loop
